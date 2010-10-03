@@ -44,6 +44,12 @@ Examples:
     $ python %(name)s x
     $ python %(name)s -y0x5 "abs(x)"
     $ python %(name)s --colors=336699,ffffee,990000,009900 --dimensions=800x600 -x-5x10 -y-5x10 x -x x**2 "5-x**2"
+
+Cool Examples (args only):
+    "x*sin(10*x)" x -x
+    -x0x5 "ln(x)*cos(15*x)" "ln(x)" "-ln(x)"
+    "sin(954*x)-2*cos(x)"
+    "sin(tan(x)/x)" "cos(tan(x)/x)"
 """ % {'name': sys.argv[0]}
 
 
