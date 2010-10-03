@@ -14,7 +14,7 @@ def usage():
 Titties! Who doesn't love them? Unfortunately, this has nothing to do with
 titties. This is a graph library that will plot functions on an x/y scale.
 
-Usage: %s [-d<dimensions>] [-x|y<x or y-axis scale>] arg1[, arg2, etc]
+Usage: %(name)s [-d<dimensions>] [-x|y<x or y-axis scale>] arg1[, arg2, etc]
 
 Options:
 
@@ -32,13 +32,26 @@ Options:
         axis). Uses the format <from>x<to>, for example to make a graph that
         extends from -5 to 5 on the x axis and 0 to 1.5 on y, use:
         "-x-5x5 -y0x1.5"
-"""
+
+Functions:
+    The python math library is available to use in functions. Most functions
+    should be quoted on the command line to prevent bash from attempting to
+    parse it. One special case is when the function starts with negative x -
+    the command line argument parser assumes it as a switch and will fail. To
+    work around this, use something like "0-x" or "(-x)".
+
+Examples:
+
+    $ python %(name)s x
+    $ python %(name)s -y0x5 "abs(x)"
+    $ python %(name)s --colors=336699,ffffee,990000,009900 --dimensions=800x600 -x-5x10 -y-5x10 x -x x**2 "5-x**2"
+""" % {'name': sys.argv[0]}
 
 
 if __name__ == "__main__":
     try:
         opts, args = getopt.getopt(sys.argv[1:], "?c:d:x:y:",
-                                       ["help", "dimensions="])
+                                       ["help", "colors=", "dimensions="])
     except getopt.GetoptError, e:
         print str(e)
         usage()
@@ -98,5 +111,5 @@ if __name__ == "__main__":
 
     tittie = Tittie(**defaults)
     for func in funcs:
-        tittie.plot(func)
+        tittie.add_func(func)
     tittie.boob()
