@@ -67,6 +67,25 @@ class Tittie(object):
         pygame.draw.line(self.screen, axis_color,
                          self.translate_point(0, self.y_scale[0]),
                          self.translate_point(0, self.y_scale[1]))
+        # axis labels
+        x_pos = self.dimensions[1] - self.translate(0, self.y_scale, (0, self.dimensions[1]))
+        y_pos = self.translate(0, self.x_scale, (0, self.dimensions[0])) + 3
+        axis_labels = (
+            (self.x_scale[0], False, True, 0, x_pos),
+            (self.x_scale[1], True, True, self.dimensions[0], x_pos),
+            (self.y_scale[1], False, False, y_pos, 0),
+            (self.y_scale[0], False, True, y_pos, self.dimensions[1])
+        )
+        for label in axis_labels:
+            self.render_text(*label, color=axis_color)
+
+    def render_text(self, text, offset_x, offset_y, x, y, color):
+        surf = self.font.render(str(text), True, color)
+        if offset_x:
+            x -= surf.get_width()
+        if offset_y:
+            y -= surf.get_height()
+        self.screen.blit(surf, (x, y))
 
     def plot(self, func, position):
         color = self.colors[self.current_color % len(self.colors)]
