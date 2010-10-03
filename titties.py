@@ -1,9 +1,13 @@
 import getopt
+import re
 import sys
 
 from titties.tittie import Tittie
 from titties.constants import *
 
+
+class InvalidArgumentException(Exception):
+    pass
 
 def usage():
     print """
@@ -13,6 +17,11 @@ titties. This is a graph library that will plot functions on an x/y scale.
 Usage: %s [-d<dimensions>] [-x|y<x or y-axis scale>] arg1[, arg2, etc]
 
 Options:
+
+    -c, --colors:
+        A comma-separated list of hex color values to use for each curve. The
+        values will be rotated through; using just one value will use the same
+        color for each curve. E.g., "-cffffff,ffdddd,336699" or "-cffffff".
 
     -d, --dimensions:
         Indicates the dimensions of the window that opens. Should be specified
@@ -25,9 +34,10 @@ Options:
         "-x-5x5 -y0x1.5"
 """
 
+
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "?d:x:y:",
+        opts, args = getopt.getopt(sys.argv[1:], "?c:d:x:y:",
                                        ["help", "dimensions="])
     except getopt.GetoptError, e:
         print str(e)
@@ -37,26 +47,35 @@ if __name__ == "__main__":
     defaults = {
         'dimensions': (400, 400),
         'x_scale': (-5.0, 5.0),
-        'y_scale': (-5.0, 5.0)
+        'y_scale': (-5.0, 5.0),
+        'colors': None
     }
     def scale(val, type_, key, defaults):
         x, _, y = val.partition('x')
         try:
             tup = (type_(x), type_(y))
         except Exception, e:
-            print "\n'%s' not specified correctly (%s)" % (key, str(e))
-            usage()
-            sys.exit(1)
+            raise InvalidArgumentEception, "'%s' not specified correctly (%s)" % (key, str(e))
         defaults[key] = tup
 
-    for opt, arg in opts:
-        if opt in ('-?', '--help'):
-            usage()
-            sys.exit(0)
-        if opt in ('-d', '--dimensions'):
-            scale(arg, int, 'dimensions', defaults)
-        if opt in ('-x', '-y'):
-            scale(arg, float, '%s_scale' % opt[1], defaults)
+    try:
+        for opt, arg in opts:
+            if opt in ('-?', '--help'):
+                usage()
+                sys.exit(0)
+            if opt in ('-d', '--dimensions'):
+                scale(arg, int, 'dimensions', defaults)
+            if opt in ('-x', '-y'):
+                scale(arg, float, '%s_scale' % opt[1], defaults)
+            if opt in ('-c', '--colors'):
+                colors = arg.split(',')
+                if not all([re.match(r'[0-9a-f]{6}', c) for c in colors]):
+                    raise InvalidArgumentException, "Invalid color value specified"
+                defaults['colors'] = ['#%s' % c for c in colors]
+    except InvalidArgumentException, e:
+        print "\n%s" % e
+        usage()
+        sys.exit(1)
 
     if len(args) == 0:
         print "You must specify at least one function. Use -? to display usage"

@@ -2,19 +2,23 @@ import pygame
 import sys
 
 
-COLORS = ('#ff0000', '#00ff00', '#0000ff')
+COLORS = ('#ff4444', '#44ff44', '#4444ff', '#ff6699')
 
 
 class Tittie(object):
-    def __init__(self, dimensions, x_scale, y_scale):
+    def __init__(self, dimensions, x_scale, y_scale, colors=None):
         self.dimensions = dimensions
         self.x_scale = x_scale
         self.y_scale = y_scale
+
         pygame.init()
         pygame.display.set_caption('TITTIES!')
         self.screen = pygame.display.set_mode(dimensions)
-        self.colors = [pygame.Color(color) for color in COLORS]
+        if not colors:
+            colors = COLORS
+        self.colors = [pygame.Color(color) for color in colors]
         self.current_color = 0
+
         increment = float(x_scale[1] - x_scale[0]) / dimensions[0]
         self.x_points = [x_scale[0] + x * increment
                          for x in range(0, dimensions[0]+1)]
