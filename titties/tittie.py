@@ -27,15 +27,15 @@ class Tittie(object):
                          self.translate_point(0, y_scale[1]))
 
     def translate(self, val, from_scale, to_scale):
-        return val / (from_scale[1] - from_scale[0]) * \
-                      (to_scale[1] - to_scale[0])
+        shift = 0 - from_scale[0]
+        from_ = (from_scale[0] + shift, from_scale[1] + shift)
+        return (to_scale[1] - to_scale[0]) / (from_[1] - from_[0]) * (val + shift)
 
     def translate_point(self, x, y):
         return (
-            int(self.translate(x, self.x_scale, (0, self.dimensions[0])) +
-                self.dimensions[0] / 2),
-            int(-self.translate(y, self.y_scale, (0, self.dimensions[1])) +
-                self.dimensions[1] / 2)
+            int(self.translate(x, self.x_scale, (0, self.dimensions[0]))),
+            int(self.dimensions[1] -
+                self.translate(y, self.y_scale, (0, self.dimensions[1])) - 1)
         )
 
     def plot(self, func):
