@@ -97,8 +97,12 @@ class Grapher(object):
 
         points = []
         for x in self.x_points:
-            y = func(x)
-            points.append(self.translate_point(x, y))
+            try:
+                y = func(x)
+            except Exception, e:
+                print "Plotting %s failed: %s" % (x, e)
+            else:
+                points.append(self.translate_point(x, y))
         pygame.draw.lines(self.screen, color, False, points)
         pygame.display.flip()
 
