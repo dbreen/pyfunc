@@ -1,8 +1,13 @@
+import os
 import pygame
 import sys
 
 
+ROOT_DIR = os.path.dirname(__file__)
+RESOURCE_DIR = os.path.join(ROOT_DIR, "resources")
 DEFAULT_COLORS = ('#ff4444', '#44ff44', '#4444ff', '#ff6699')
+DEFAULT_FONT = os.path.join(RESOURCE_DIR, "fonts", "inconsolata.otf")
+FONT_SIZE = 14
 
 
 class Tittie(object):
@@ -25,6 +30,9 @@ class Tittie(object):
             colors = DEFAULT_COLORS
         self.colors = [pygame.Color(color) for color in colors]
         self.current_color = 0
+
+        pygame.font.init()
+        self.font = pygame.font.Font(DEFAULT_FONT, FONT_SIZE)
 
     def translate(self, val, from_scale, to_scale):
         """
@@ -60,9 +68,14 @@ class Tittie(object):
                          self.translate_point(0, self.y_scale[0]),
                          self.translate_point(0, self.y_scale[1]))
 
-    def plot(self, func):
+    def plot(self, func, position):
         color = self.colors[self.current_color % len(self.colors)]
         self.current_color += 1
+
+        # draw the function definition in the curve's color, as a legend
+        funcname = self.font.render(func.as_str, True, color)
+        self.screen.blit(funcname, (5, (FONT_SIZE+2) * position + 5))
+
         points = []
         for x in self.x_points:
             y = func(x)
@@ -71,8 +84,8 @@ class Tittie(object):
         pygame.display.flip()
 
     def plot_all(self):
-        for func in self.funcs:
-            self.plot(func)
+        for i, func in enumerate(self.funcs):
+            self.plot(func, i)
 
     def boob(self):
         self.draw_axes()

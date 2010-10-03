@@ -100,6 +100,7 @@ if __name__ == "__main__":
             # create a function from the arg and try it out with 0
             func = eval("lambda x: %s" % f)
             func(0)
+            func.as_str = f
         except Exception, e:
             print "Your function '%s' sucks. Here's the error:" % f
             print str(e)
