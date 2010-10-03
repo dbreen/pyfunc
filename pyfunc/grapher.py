@@ -10,7 +10,7 @@ DEFAULT_FONT = os.path.join(RESOURCE_DIR, "fonts", "inconsolata.otf")
 FONT_SIZE = 14
 
 
-class Tittie(object):
+class Grapher(object):
     def __init__(self, dimensions, x_scale, y_scale, colors=None):
         self.dimensions = dimensions
         self.x_scale = x_scale
@@ -24,7 +24,7 @@ class Tittie(object):
 
         # initialize pygame and create the color objects
         pygame.init()
-        pygame.display.set_caption('TITTIES!')
+        pygame.display.set_caption('pyfunc')
         self.screen = pygame.display.set_mode(dimensions)
         if not colors:
             colors = DEFAULT_COLORS
@@ -106,11 +106,10 @@ class Tittie(object):
         for i, func in enumerate(self.funcs):
             self.plot(func, i)
 
-    def boob(self):
+    def run(self):
         self.draw_axes()
         self.plot_all()
         while(True):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-

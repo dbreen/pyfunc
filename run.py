@@ -2,8 +2,8 @@ import getopt
 import re
 import sys
 
-from titties.tittie import Tittie
-from titties.constants import *
+from pyfunc.grapher import Grapher
+from pyfunc.constants import *
 
 
 class InvalidArgumentException(Exception):
@@ -11,8 +11,7 @@ class InvalidArgumentException(Exception):
 
 def usage():
     print """
-Titties! Who doesn't love them? Unfortunately, this has nothing to do with
-titties. This is a graph library that will plot functions on an x/y scale.
+pyfunc is a graph library that will plot functions on an x/y scale.
 
 Usage: %(name)s [-d<dimensions>] [-x|y<x or y-axis scale>] arg1[, arg2, etc]
 
@@ -107,10 +106,10 @@ if __name__ == "__main__":
             sys.exit(1)
         funcs.append(func)
 
-    print "tittie args: ", defaults
+    print "pyfunc args: ", defaults
     print "funcs: ", funcs
 
-    tittie = Tittie(**defaults)
+    grapher = Grapher(**defaults)
     for func in funcs:
-        tittie.add_func(func)
-    tittie.boob()
+        grapher.add_func(func)
+    grapher.run()
