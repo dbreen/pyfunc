@@ -1,0 +1,40 @@
+pyfunc is a graph library that will plot functions on an x/y scale.
+
+Usage: pyfunc [-d<dimensions>] [-x|y<x or y-axis scale>] arg1[, arg2, etc]
+
+Options:
+
+    -c, --colors:
+        A comma-separated list of hex color values to use for each curve. The
+        values will be rotated through; using just one value will use the same
+        color for each curve. E.g., "-cffffff,ffdddd,336699" or "-cffffff".
+
+    -d, --dimensions:
+        Indicates the dimensions of the window that opens. Should be specified
+        with the following format: <width>x<height>, e.g.: "400x400".
+
+    -x, -y:
+        Specifies the scale of the graph in given direction (x axis, or y
+        axis). Uses the format <from>x<to>, for example to make a graph that
+        extends from -5 to 5 on the x axis and 0 to 1.5 on y, use:
+        "-x-5x5 -y0x1.5"
+
+Functions:
+    The python math library is available to use in functions. Most functions
+    should be quoted on the command line to prevent bash from attempting to
+    parse it. One special case is when the function starts with negative x -
+    the command line argument parser assumes it as a switch and will fail. To
+    work around this, use something like "0-x" or "(-x)".
+
+Examples:
+
+    $ python pyfunc x
+    $ python pyfunc -y0x5 "abs(x)"
+    $ python pyfunc --colors=336699,ffffee,990000,009900 --dimensions=800x600 -x-5x10 -y-5x10 x -x x**2 "5-x**2"
+
+Cool Examples (args only):
+    "x*sin(10*x)" x -x
+    -x0x5 "ln(x)*cos(15*x)" "ln(x)" "-ln(x)"
+    "sin(954*x)-2*cos(x)"
+    "sin(tan(x)/x)" "cos(tan(x)/x)"
+
